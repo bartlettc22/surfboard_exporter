@@ -2,11 +2,8 @@ FROM golang:1.12 as builder
 RUN mkdir /build 
 ADD . /build/
 WORKDIR /build 
-RUN go build -o surfboard_exporter .
+RUN CGO_ENABLED=0 go build -o surfboard-exporter -mod vendor .
 
 FROM alpine
-RUN adduser -S -D -H -h /app appuser
-USER appuser
-COPY --from=builder /build/surfboard_exporter /app/
-WORKDIR /app
-CMD ["./surfboard_exporter"]
+COPY --from=builder /build/surfboard-exporter /usr/bin
+CMD ["surfboard-exporter"]

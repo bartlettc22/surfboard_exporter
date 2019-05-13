@@ -14,6 +14,11 @@ var (
 		Help: "Information about the modem hardware/firmware",
 	}, []string{"model_name", "vendor_name", "firmware_name", "boot_version", "hardware_version", "serial_number", "firmware_build_time"})
 
+	modemAddresses = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_addresses",
+		Help: "Information about the modem addresses",
+	}, []string{"serial_number", "hfc_mac", "ethernet_ip", "ethernet_mac", "cpe_mac", "cpe_mac_status"})
+
 	// Downstream metrics
 
 	modemDownstreamFrequency = promauto.NewGaugeVec(prometheus.GaugeOpts{
@@ -41,7 +46,7 @@ var (
 	modemUpstreamChannelInfo = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_upstream_channel_info",
 		Help: "Modem's upstream channel info",
-	}, []string{"channel_id","ranging_service_id","modulation_methods"})
+	}, []string{"channel_id", "ranging_service_id", "modulation_methods"})
 
 	modemUpstreamFrequency = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_upstream_freq",
@@ -61,5 +66,22 @@ var (
 	modemUpstreamRangingStatus = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_upstream_ranging_status",
 		Help: "Modem's upstream ranging status",
+	}, []string{"channel_id"})
+
+	// Codeword metrics
+
+	modemCodewordsUnerrored = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_codewords_unerrored_total",
+		Help: "Modem's total unerrored codewords",
+	}, []string{"channel_id"})
+
+	modemCodewordsCorrectable = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_codewords_correctable_total",
+		Help: "Modem's total correctable codewords",
+	}, []string{"channel_id"})
+
+	modemCodewordsUncorrectable = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_codewords_uncorrectable_total",
+		Help: "Modem's total uncorrectable codewords",
 	}, []string{"channel_id"})
 )
