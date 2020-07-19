@@ -12,7 +12,7 @@ var (
 	modemInfo = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_info",
 		Help: "Information about the modem hardware/firmware",
-	}, []string{"model_name", "vendor_name", "firmware_name", "boot_version", "hardware_version", "serial_number", "firmware_build_time"})
+	}, []string{"model_name", "vendor_name", "firmware_name", "boot_version", "hardware_version", "serial_number", "firmware_build_time", "docsis_version"})
 
 	modemAddresses = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_addresses",
@@ -20,7 +20,6 @@ var (
 	}, []string{"serial_number", "hfc_mac", "ethernet_ip", "ethernet_mac", "cpe_mac", "cpe_mac_status"})
 
 	// Downstream metrics
-
 	modemDownstreamFrequency = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_downstream_freq",
 		Help: "Modem's downstream signal frequency (Hz)",
@@ -41,12 +40,27 @@ var (
 		Help: "Modem's downstream power level (dBmV)",
 	}, []string{"channel_id"})
 
+	modemDownstreamLocked = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_downstream_locked",
+		Help: "Modem's downstream lock status (0=not locked, 1=locked)",
+	}, []string{"channel_id"})
+
+	modemDownstreamCorrected = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_downstream_corrected_total",
+		Help: "Modem's total downstream corrected packets",
+	}, []string{"channel_id"})
+
+	modemDownstreamUncorrectable = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_downstream_uncorrectable_total",
+		Help: "Modem's total downstream uncorrectable packets",
+	}, []string{"channel_id"})
+
 	// Upstream metrics
 
 	modemUpstreamChannelInfo = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_upstream_channel_info",
 		Help: "Modem's upstream channel info",
-	}, []string{"channel_id", "ranging_service_id", "modulation_methods"})
+	}, []string{"channel_id", "channel", "ranging_service_id", "modulation_methods", "us_channel_type"})
 
 	modemUpstreamFrequency = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_upstream_freq",
@@ -66,6 +80,18 @@ var (
 	modemUpstreamRangingStatus = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "modem_upstream_ranging_status",
 		Help: "Modem's upstream ranging status",
+	}, []string{"channel_id"})
+
+	// SB8200 only
+	modemUpstreamLocked = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_upstream_locked",
+		Help: "Modem's upstream lock status (0=not locked, 1=locked)",
+	}, []string{"channel_id"})
+
+	// SB8200 only
+	modemUpstreamWidth = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "modem_upstream_width",
+		Help: "Modem's upstream width frequency (Hz)",
 	}, []string{"channel_id"})
 
 	// Codeword metrics
